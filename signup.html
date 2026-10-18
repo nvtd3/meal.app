@@ -3,11 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="js\signup.js" defer></script>
-    <link rel="stylesheet" href="css\signup.css">
+    <title>Sign Up - meal.app</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Nối đến file signup.css -->
+    <link rel="stylesheet" href="css/signup.css">
 </head>
 <body>
-    <div>Sign Up</div>
+
+    <!-- Nút đổi ngôn ngữ -->
+    <button class="lang-switcher" id="langToggle" onclick="toggleLanguage()">
+        <img id="langFlag" src="https://flagcdn.com/w20/gb.png" alt="Flag">
+        <span id="langText">English</span>
+    </button>
+
+    <!-- Khối Wrapper nằm chính giữa màn hình -->
+    <div class="register-wrapper">
+        
+        <!-- Header thông tin Thương hiệu meal.app -->
+        <div class="brand-header">
+            <div class="brand-logo">
+                <i class="fa-solid fa-utensils"></i>
+            </div>
+            <h1 data-en="meal.app" data-vi="meal.app">meal.app</h1>
+            <p data-en="Discover thousands of delicious recipes every day" data-vi="Khám phá hàng ngàn công thức nấu ăn ngon mỗi ngày">Discover thousands of delicious recipes every day</p>
+        </div>
+
+        <!-- Card Đăng ký chính -->
+        <div class="register-card">
+            <h2 data-en="Create an Account" data-vi="Tạo Tài Khoản Mới">Create an Account</h2>
+            
+            <form id="registerForm">
+                <!-- Họ tên -->
+                <div class="form-group">
+                    <label for="fullname" data-en="Full Name" data-vi="Họ và tên">Full Name</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="fullname" data-placeholder-en="John Doe" data-placeholder-vi="Nguyễn Văn A" placeholder="John Doe" required>
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email" data-en="Email Address" data-vi="Địa chỉ Email">Email Address</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" placeholder="example@gmail.com" required>
+                        <i class="fa-regular fa-envelope"></i>
+                    </div>
+                </div>
+
+                <!-- Mật khẩu -->
+                <div class="form-group">
+                    <label for="password" data-en="Password" data-vi="Mật khẩu">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" data-placeholder-en="At least 6 characters" data-placeholder-vi="Ít nhất 6 ký tự" placeholder="At least 6 characters" required>
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                </div>
+
+                <!-- Xác nhận mật khẩu -->
+                <div class="form-group">
+                    <label for="confirmPassword" data-en="Confirm Password" data-vi="Nhập lại mật khẩu">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="confirmPassword" data-placeholder-en="Re-enter password" data-placeholder-vi="Nhập lại mật khẩu" placeholder="Re-enter password" required>
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                </div>
+
+                <!-- Điều khoản sử dụng -->
+                <div class="terms-group">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms" style="display:inline; font-weight:normal;">
+                        <span data-en="I agree to the" data-vi="Tôi đồng ý với">I agree to the</span> 
+                        <a href="#" data-en="Terms of Service" data-vi="Điều khoản dịch vụ">Terms of Service</a>
+                    </label>
+                </div>
+
+                <!-- Nút Submit -->
+                <button type="submit" class="btn-submit" data-en="Register Now" data-vi="Đăng ký ngay">Register Now</button>
+            </form>
+
+            <!-- Footer chuyển đổi Login -->
+            <div class="auth-footer">
+                <span data-en="Already have an account?" data-vi="Đã có tài khoản?">Already have an account?</span> 
+                <a href="#" data-en="Sign in" data-vi="Đăng nhập">Sign in</a>
+            </div>
+        </div>
+
+        <!-- Thông tin API Badge bên dưới card -->
+        <div class="api-badge">
+            <i class="fa-solid fa-database"></i> 
+            <span data-en="Powered by" data-vi="Được cung cấp bởi">Powered by</span> 
+            <strong>TheMealDB API</strong>
+        </div>
+
+    </div>
+
+    <!-- JavaScript chuyển đổi ngôn ngữ & tương tác -->
+    <script>
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'vi' : 'en';
+            
+            const langFlag = document.getElementById('langFlag');
+            const langText = document.getElementById('langText');
+            
+            if (currentLang === 'vi') {
+                langFlag.src = "https://flagcdn.com/w20/vn.png";
+                langText.textContent = "Tiếng Việt";
+                document.documentElement.lang = "vi";
+            } else {
+                langFlag.src = "https://flagcdn.com/w20/gb.png";
+                langText.textContent = "English";
+                document.documentElement.lang = "en";
+            }
+
+            // Đổi văn bản các phần tử có data-en / data-vi
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.textContent = el.getAttribute(`data-${currentLang}`);
+            });
+
+            // Đổi placeholder input
+            document.querySelectorAll('[data-placeholder-en]').forEach(el => {
+                el.placeholder = el.getAttribute(`data-placeholder-${currentLang}`);
+            });
+        }
+
+        // Xử lý gửi form
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const pass = document.getElementById('password').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+
+            if (pass !== confirmPass) {
+                alert(currentLang === 'vi' ? 'Mật khẩu nhập lại không khớp!' : 'Passwords do not match!');
+                return;
+            }
+
+            alert(currentLang === 'vi' 
+                ? 'Đăng ký tài khoản meal.app thành công!' 
+                : 'Account registered successfully on meal.app!');
+        });
+    </script>
 </body>
 </html>
