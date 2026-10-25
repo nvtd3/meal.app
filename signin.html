@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - meal.app</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="css/signin.css">
+</head>
+<body>
+
+    <div class="login-wrapper">
+        
+        <!-- Brand Header -->
+        <div class="brand-header">
+            <div class="brand-logo">
+                <i class="fa-solid fa-utensils"></i>
+            </div>
+            <h1>meal.app</h1>
+            <p>Welcome back! Please enter your details</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="login-card">
+            <h2>Sign In</h2>
+            
+            <form id="loginForm">
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" placeholder="example@gmail.com" required>
+                        <i class="fa-regular fa-envelope"></i>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="#" class="forgot-pass">Forgot password?</a>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-submit">Sign In</button>
+            </form>
+
+            <!-- Link to Sign Up -->
+            <div class="auth-footer">
+                Don't have an account? <a href="signup.html">Sign up</a>
+            </div>
+        </div>
+
+        <!-- API Badge -->
+        <div class="api-badge">
+            <i class="fa-solid fa-database"></i> 
+            Powered by <strong>TheMealDB API</strong>
+        </div>
+
+    </div>
+
+    <!-- Custom Popup Modal -->
+    <div id="customModal" class="modal-overlay">
+        <div class="modal-card">
+            <div id="modalIcon" class="modal-icon success">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 id="modalTitle">Success!</h3>
+            <p id="modalMessage">You have signed in successfully.</p>
+            <button id="modalCloseBtn" class="modal-btn">OK</button>
+        </div>
+    </div>
+
+    <!-- Kết nối file JavaScript -->
+    <script src="js/signin.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - meal.app</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="home.html" class="nav-brand">
+            <div class="nav-logo-icon">
+                <i class="fa-solid fa-utensils"></i>
+            </div>
+            meal<span>.app</span>
+        </a>
+
+        <!-- Tabs -->
+        <ul class="nav-tabs">
+            <li><button id="tabHome" class="active"><i class="fa-solid fa-house"></i> Home</button></li>
+            <li><button id="tabExplore"><i class="fa-solid fa-compass"></i> Explore</button></li>
+            <li><button id="tabFavorites"><i class="fa-solid fa-bookmark"></i> Favorites</button></li>
+        </ul>
+
+        <!-- Profile & Dropdown -->
+        <div class="nav-profile-container">
+            <button class="profile-btn" id="profileBtn">
+                <div class="profile-avatar" id="profileAvatar">U</div>
+                <span class="profile-name" id="profileName">Loading...</span>
+                <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem; color: var(--text-muted);"></i>
+            </button>
+
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="#" class="dropdown-item"><i class="fa-regular fa-user"></i> My Profile</a>
+                <a href="#" class="dropdown-item"><i class="fa-solid fa-gear"></i> Settings</a>
+                <div style="height: 1px; background: var(--border-color); margin: 4px 0;"></div>
+                <a href="#" class="dropdown-item logout" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <h1>Discover Recipes from <span>TheMealDB</span></h1>
+        <p>Explore thousands of delicious meals, ingredients, and cooking steps tailored just for you.</p>
+        
+        <form class="search-box" id="searchForm">
+            <input type="text" id="searchInput" placeholder="Search for recipes (e.g. Chicken, Pasta, Beef)..." required>
+            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </form>
+    </section>
+
+    <!-- Category Filter Bar -->
+    <div class="category-bar" id="categoryBar"></div>
+
+    <!-- Recipe Results Main -->
+    <main class="container-main">
+        <h2 class="section-title" id="sectionTitle">Trending Recipes</h2>
+        <div class="recipe-results" id="recipeResults"></div>
+    </main>
+
+    <!-- Recipe Modal -->
+    <div id="recipeModal" class="recipe-modal-overlay">
+        <div class="recipe-modal-card">
+            <button class="modal-close-btn" id="modalCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+            <img id="modalImg" class="modal-img" src="" alt="Recipe Image">
+            <div class="modal-body">
+                <h2 id="modalTitle">Recipe Title</h2>
+                <div class="modal-badges">
+                    <span class="badge" id="modalCategory">Category</span>
+                    <span class="badge" id="modalArea">Area</span>
+                </div>
+                <h3 class="modal-section-title">Ingredients</h3>
+                <ul class="ingredients-list" id="modalIngredients"></ul>
+                <h3 class="modal-section-title">Instructions</h3>
+                <p class="instructions-text" id="modalInstructions"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Link -->
+    <script src="js/home.js"></script>
+</body>
+</html>

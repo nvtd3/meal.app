@@ -1,2 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to meal.app - Discover Delicious Recipes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/landing.css">
+</head>
+<body>
 
-<script>location.href = "signup.html"</script>
+    <nav class="landing-nav">
+        <a href="index.html" class="nav-brand">
+            <div class="nav-logo-icon">
+                <i class="fa-solid fa-utensils"></i>
+            </div>
+            meal<span>.app</span>
+        </a>
+        
+        <div id="authNavArea" class="nav-auth-buttons">
+            <a href="signin.html" class="btn-signin">Sign In</a>
+            <a href="signup.html" class="btn-signup">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="hero-content">
+            <span class="hero-badge"><i class="fa-solid fa-fire"></i> Smart Open Recipe Platform</span>
+            <h1>Cook Like a Chef with <span>meal.app</span></h1>
+            <p>Experience high-end recipe search, secure personal collection storage, and optimize your kitchen workflow seamlessly.</p>
+            
+            <div class="hero-cta" id="heroCtaArea">
+                <a href="signup.html" class="btn-primary">Create Free Account</a>
+                <a href="signin.html" class="btn-secondary">Explore Now</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=600&q=80" alt="Delicious Food">
+        </div>
+    </header>
+
+    <!-- Trust Stats Bar -->
+    <div class="stats-bar">
+        <div class="stats-container">
+            <div class="stat-item">
+                <h3>100%</h3>
+                <p>Free & Transparent</p>
+            </div>
+            <div class="stat-item">
+                <h3>TheMealDB</h3>
+                <p>Global Database</p>
+            </div>
+            <div class="stat-item">
+                <h3>Private</h3>
+                <p>Secure Local Storage</p>
+            </div>
+            <div class="stat-item">
+                <h3>Lightning</h3>
+                <p>Instant Search Speed</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Overview -->
+    <section class="features-section">
+        <h2>Our Service Pillars</h2>
+        <p class="section-subtitle">Designed with modern technology standards to deliver a flawless recipe searching and management experience.</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-globe"></i></div>
+                <h3>Global Database</h3>
+                <p>Access thousands of dishes from every culinary culture worldwide, updated continuously through open APIs.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-bookmark"></i></div>
+                <h3>Favorite Collection</h3>
+                <p>Quickly bookmark your favorite meals into your personal list to easily revisit them anytime.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-list-check"></i></div>
+                <h3>Detailed Guides</h3>
+                <p>Provide precise ingredient measurements along with intuitive step-by-step instructions to ensure success every time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deep-Dive Feature Sections -->
+    <section class="deep-dive-section">
+        <div class="feature-split">
+            <div class="feature-split-content">
+                <h3>Smart Search, Precise Navigation</h3>
+                <p>With just a few basic keywords, meal.app's smart system retrieves all recipe info, regional origins, and dish categories instantly.</p>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-circle-check"></i> Filter by rich categories (Chicken, Beef, Dessert...)</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Interface optimized for reading and interaction</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Seamless compatibility across mobile and desktop devices</li>
+                </ul>
+            </div>
+            <div class="feature-split-image">
+                <img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=600&q=80" alt="Smart Search">
+            </div>
+        </div>
+
+        <div class="feature-split reverse">
+            <div class="feature-split-content">
+                <h3>Absolute Personal Data Privacy</h3>
+                <p>We respect your privacy. All your account details and favorite recipe lists are securely stored directly on your browser using modern LocalStorage.</p>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-circle-check"></i> No data sharing with third parties</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Logins and sessions strictly controlled</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Option to manage or clear personal data anytime</li>
+                </ul>
+            </div>
+            <div class="feature-split-image">
+                <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=600&q=80" alt="Privacy First">
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-item">
+            <div class="faq-question">How does meal.app work? <i class="fa-solid fa-chevron-down"></i></div>
+            <div class="faq-answer">meal.app connects directly to TheMealDB open database API to provide a rich repository of recipes, combined with a personal account management system right in your browser.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Is it free to use? <i class="fa-solid fa-chevron-down"></i></div>
+            <div class="faq-answer">Completely free. meal.app is an open platform for anyone passionate about cooking and food discovery.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Where are my favorite recipes stored? <i class="fa-solid fa-chevron-down"></i></div>
+            <div class="faq-answer">Your favorite recipes are stored directly in your browser's LocalStorage, ensuring full privacy and lightning-fast retrieval speed.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">How do I get started? <i class="fa-solid fa-chevron-down"></i></div>
+            <div class="faq-answer">Simply click the "Create Free Account" button, register your details in seconds, and start your culinary journey on the Home dashboard.</div>
+        </div>
+    </section>
+
+    <footer class="landing-footer">
+        <p>&copy; 2026 meal.app. All rights reserved. Powered by TheMealDB API.</p>
+    </footer>
+
+    <script src="js/landing.js"></script>
+</body>
+</html>
