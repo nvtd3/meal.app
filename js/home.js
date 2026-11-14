@@ -3,28 +3,65 @@ const currentUser = JSON.parse(localStorage.getItem('meal_current_user'));
 if (!currentUser) {
     window.location.href = 'signin.html';
 } else {
-    document.getElementById('profileName').textContent = currentUser.fullname;
-    document.getElementById('profileAvatar').textContent = currentUser.fullname.charAt(0).toUpperCase();
+    const profileNameEl = document.getElementById('profileName');
+    const profileAvatarEl = document.getElementById('profileAvatar');
+    if (profileNameEl) profileNameEl.textContent = currentUser.fullname;
+    if (profileAvatarEl) profileAvatarEl.textContent = currentUser.fullname.charAt(0).toUpperCase();
 }
 
-// 2. Profile Dropdown & Logout
+// Áp dụng Theme nếu có
+const savedTheme = localStorage.getItem('meal_theme') || 'light';
+if (savedTheme === 'dark') {
+    document.documentElement.style.setProperty('--bg-main', '#1A1C23');
+    document.documentElement.style.setProperty('--card-bg', '#242731');
+    document.documentElement.style.setProperty('--text-main', '#F8FAFC');
+    document.documentElement.style.setProperty('--text-muted', '#94A3B8');
+    document.documentElement.style.setProperty('--border-color', '#334155');
+}
+
+// 2. Profile Dropdown & Logout (Có kiểm tra tồn tại phần tử an toàn)
 const profileBtn = document.getElementById('profileBtn');
 const dropdownMenu = document.getElementById('dropdownMenu');
 
-profileBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    dropdownMenu.classList.toggle('active');
-});
+if (profileBtn && dropdownMenu) {
+    profileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('active');
+    });
 
-window.addEventListener('click', () => dropdownMenu.classList.remove('active'));
+    window.addEventListener('click', () => {
+        dropdownMenu.classList.remove('active');
+    });
+}
 
-document.getElementById('logoutBtn').addEventListener('click', (e) => {
-    e.preventDefault();
-    localStorage.removeItem('meal_current_user');
-    window.location.href = 'signin.html';
-});
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('meal_current_user');
+        window.location.href = 'signin.html';
+    });
+}
 
-// 3. Quản lý Favorites trong localStorage
+// Toast Notification
+function showToast(message, type = 'success') {
+    let container = document.getElementById('toastContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        document.body.appendChild(container);
+    }
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = type === 'success' 
+        ? `<i class="fa-solid fa-circle-check" style="color: #2A9D8F;"></i> ${message}` 
+        : `<i class="fa-solid fa-circle-exclamation" style="color: #E63946;"></i> ${message}`;
+    
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// Quản lý Favorites & Notes
 function getFavorites() {
     return JSON.parse(localStorage.getItem('meal_favorites')) || [];
 }
@@ -36,8 +73,11 @@ function toggleFavorite(meal, event) {
 
     if (index > -1) {
         favorites.splice(index, 1);
+        showToast('Removed from favorites', 'error');
     } else {
+        meal.note = '';
         favorites.push(meal);
+        showToast('Added to your favorite recipes!', 'success');
     }
     localStorage.setItem('meal_favorites', JSON.stringify(favorites));
     
@@ -45,39 +85,41 @@ function toggleFavorite(meal, event) {
         renderFavorites();
     } else {
         const btn = event.currentTarget;
-        btn.classList.toggle('active');
-        const icon = btn.querySelector('i');
-        icon.className = btn.classList.contains('active') ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+        if (btn) {
+            btn.classList.toggle('active');
+            const icon = btn.querySelector('i');
+            if (icon) icon.className = btn.classList.contains('active') ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+        }
     }
 }
 
-// 4. API Gọi TheMealDB & Render
+// API Render Meals
 const recipeResults = document.getElementById('recipeResults');
 const sectionTitle = document.getElementById('sectionTitle');
 let currentTab = 'home';
 
 async function fetchMeals(url, title) {
-    recipeResults.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">Loading recipes...</p>';
-    sectionTitle.textContent = title;
+    if (recipeResults) recipeResults.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">Loading recipes...</p>';
+    if (sectionTitle) sectionTitle.textContent = title;
 
     try {
         const res = await fetch(url);
         const data = await res.json();
 
         if (!data.meals) {
-            recipeResults.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">No recipes found.</p>';
+            if (recipeResults) recipeResults.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">No recipes found.</p>';
             return;
         }
-
         renderMeals(data.meals);
     } catch (err) {
         console.error(err);
-        recipeResults.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--primary);">Failed to fetch recipes.</p>';
+        if (recipeResults) recipeResults.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--primary);">Failed to fetch recipes.</p>';
     }
 }
 
 function renderMeals(meals) {
     const favorites = getFavorites();
+    if (!recipeResults) return;
 
     recipeResults.innerHTML = meals.map(meal => {
         const isFav = favorites.some(fav => fav.idMeal === meal.idMeal);
@@ -103,27 +145,36 @@ function escapeMealJson(meal) {
     return JSON.stringify(meal).replace(/"/g, '&quot;');
 }
 
-// 5. Categories Bar
-async function loadCategories() {
+// Load Categories & Areas (An toàn với kiểm tra phần tử tồn tại)
+// Load Categories & Areas (Đã bỏ giới hạn để hiển thị đầy đủ tất cả quốc gia)
+async function loadFilters() {
     const categoryBar = document.getElementById('categoryBar');
+    const areaBar = document.getElementById('areaBar');
     try {
-        const res = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
-        const data = await res.json();
+        if (categoryBar) {
+            const catRes = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
+            const catData = await catRes.json();
+            categoryBar.innerHTML = `<button class="category-chip active" onclick="filterByCategory('All', this)">All Categories</button>` +
+                catData.meals.map(cat => `<button class="category-chip" onclick="filterByCategory('${cat.strCategory}', this)">${cat.strCategory}</button>`).join('');
+        }
 
-        let html = `<button class="category-chip active" onclick="filterByCategory('All', this)">All</button>`;
-        html += data.meals.slice(0, 8).map(cat => `
-            <button class="category-chip" onclick="filterByCategory('${cat.strCategory}', this)">${cat.strCategory}</button>
-        `).join('');
-
-        categoryBar.innerHTML = html;
+        if (areaBar) {
+            const areaRes = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?a=list');
+            const areaData = await areaRes.json();
+            
+            // Hiển thị TOÀN BỘ danh sách các quốc gia/vùng miền thay vì bị cắt ngắn
+            areaBar.innerHTML = `<button class="category-chip active" onclick="filterByArea('All', this)">All Cuisines</button>` +
+                areaData.meals.map(area => `<button class="category-chip" onclick="filterByArea('${area.strArea}', this)">${area.strArea}</button>`).join('');
+        }
     } catch (err) {
-        console.error('Failed to load categories', err);
+        console.error('Failed to load filters', err);
+        showToast('Failed to load filter options.', 'error');
     }
 }
 
 function filterByCategory(category, btnElement) {
-    document.querySelectorAll('.category-chip').forEach(el => el.classList.remove('active'));
-    btnElement.classList.add('active');
+    document.querySelectorAll('#categoryBar .category-chip').forEach(el => el.classList.remove('active'));
+    if (btnElement) btnElement.classList.add('active');
 
     if (category === 'All') {
         fetchMeals('https://www.themealdb.com/api/json/v1/1/search.php?s=chicken', 'Trending Recipes');
@@ -132,18 +183,78 @@ function filterByCategory(category, btnElement) {
     }
 }
 
-// 6. Modal Xem chi tiết
+function filterByArea(area, btnElement) {
+    document.querySelectorAll('#areaBar .category-chip').forEach(el => el.classList.remove('active'));
+    if (btnElement) btnElement.classList.add('active');
+
+    if (area === 'All') {
+        fetchMeals('https://www.themealdb.com/api/json/v1/1/search.php?s=chicken', 'Trending Recipes');
+    } else {
+        fetchMeals(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${area}`, `${area} Cuisine Recipes`);
+    }
+}
+
+// Modal Xem Chi Tiết + Ghi Chú Cá Nhân
+let activeMealId = null;
+
 async function openRecipeModal(idMeal) {
+    activeMealId = idMeal;
     try {
         const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`);
         const data = await res.json();
         const meal = data.meals[0];
 
-        document.getElementById('modalImg').src = meal.strMealThumb;
-        document.getElementById('modalTitle').textContent = meal.strMeal;
-        document.getElementById('modalCategory').textContent = meal.strCategory;
-        document.getElementById('modalArea').textContent = meal.strArea;
-        document.getElementById('modalInstructions').textContent = meal.strInstructions;
+        const modalImg = document.getElementById('modalImg');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalCategory = document.getElementById('modalCategory');
+        const modalArea = document.getElementById('modalArea');
+        const modalInstructions = document.getElementById('modalInstructions');
+
+        if (modalImg) modalImg.src = meal.strMealThumb;
+        if (modalTitle) modalTitle.textContent = meal.strMeal;
+        if (modalCategory) modalCategory.textContent = meal.strCategory;
+        if (modalArea) modalArea.textContent = meal.strArea;
+        if (modalInstructions) modalInstructions.textContent = meal.strInstructions;
+
+        let favorites = getFavorites();
+        let currentFav = favorites.find(f => f.idMeal === idMeal);
+        
+        let noteSection = document.getElementById('recipeNoteSection');
+        if (!noteSection) {
+            const modalBody = document.querySelector('.modal-body');
+            if (modalBody) {
+                noteSection = document.createElement('div');
+                noteSection.id = 'recipeNoteSection';
+                noteSection.style.cssText = 'margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-color);';
+                noteSection.innerHTML = `
+                    <h3 class="modal-section-title"><i class="fa-solid fa-note-sticky"></i> Personal Note</h3>
+                    <textarea id="modalNoteInput" placeholder="Add a personal cooking note..." style="width: 100%; height: 80px; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; outline: none; resize: vertical;"></textarea>
+                    <button id="saveNoteBtn" style="margin-top: 8px; padding: 8px 16px; background: var(--primary); color: #FFF; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;">Save Note</button>
+                `;
+                modalBody.appendChild(noteSection);
+
+                const saveNoteBtn = document.getElementById('saveNoteBtn');
+                if (saveNoteBtn) {
+                    saveNoteBtn.addEventListener('click', () => {
+                        let favs = getFavorites();
+                        let target = favs.find(f => f.idMeal === activeMealId);
+                        const modalNoteInput = document.getElementById('modalNoteInput');
+                        if (target && modalNoteInput) {
+                            target.note = modalNoteInput.value;
+                            localStorage.setItem('meal_favorites', JSON.stringify(favs));
+                            showToast('Recipe note saved successfully!');
+                        } else {
+                            showToast('Please add recipe to favorites first to save notes.', 'error');
+                        }
+                    });
+                }
+            }
+        }
+
+        const modalNoteInput = document.getElementById('modalNoteInput');
+        if (modalNoteInput) {
+            modalNoteInput.value = currentFav ? (currentFav.note || '') : '';
+        }
 
         let ingredientsHTML = '';
         for (let i = 1; i <= 20; i++) {
@@ -153,70 +264,84 @@ async function openRecipeModal(idMeal) {
                 ingredientsHTML += `<li>${measure ? measure : ''} <strong>${ingredient}</strong></li>`;
             }
         }
-        document.getElementById('modalIngredients').innerHTML = ingredientsHTML;
-        document.getElementById('recipeModal').classList.add('active');
+        const modalIngredients = document.getElementById('modalIngredients');
+        if (modalIngredients) modalIngredients.innerHTML = ingredientsHTML;
+
+        const recipeModal = document.getElementById('recipeModal');
+        if (recipeModal) recipeModal.classList.add('active');
     } catch (err) {
         console.error('Failed to load recipe details', err);
     }
 }
 
-document.getElementById('modalCloseBtn').addEventListener('click', () => {
-    document.getElementById('recipeModal').classList.remove('active');
-});
+const modalCloseBtn = document.getElementById('modalCloseBtn');
+if (modalCloseBtn) {
+    modalCloseBtn.addEventListener('click', () => {
+        const recipeModal = document.getElementById('recipeModal');
+        if (recipeModal) recipeModal.classList.remove('active');
+    });
+}
 
-document.getElementById('recipeModal').addEventListener('click', (e) => {
-    if (e.target.id === 'recipeModal') {
-        document.getElementById('recipeModal').classList.remove('active');
-    }
-});
+// Search & Tabs
+const searchForm = document.getElementById('searchForm');
+if (searchForm) {
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const searchInput = document.getElementById('searchInput');
+        const query = searchInput ? searchInput.value.trim() : '';
+        if (!query) return;
+        fetchMeals(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`, `Search Results for "${query}"`);
+    });
+}
 
-// 7. Search Form
-document.getElementById('searchForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const query = document.getElementById('searchInput').value.trim();
-    if (!query) return;
-    fetchMeals(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`, `Search Results for "${query}"`);
-});
-
-// 8. Tabs Navigation
 const tabHome = document.getElementById('tabHome');
 const tabExplore = document.getElementById('tabExplore');
 const tabFavorites = document.getElementById('tabFavorites');
 
 function setActiveTab(activeBtn) {
-    [tabHome, tabExplore, tabFavorites].forEach(btn => btn.classList.remove('active'));
-    activeBtn.classList.add('active');
+    [tabHome, tabExplore, tabFavorites].forEach(btn => {
+        if (btn) btn.classList.remove('active');
+    });
+    if (activeBtn) activeBtn.classList.add('active');
 }
 
-tabHome.addEventListener('click', () => {
-    currentTab = 'home';
-    setActiveTab(tabHome);
-    fetchMeals('https://www.themealdb.com/api/json/v1/1/search.php?s=chicken', 'Trending Recipes');
-});
+if (tabHome) {
+    tabHome.addEventListener('click', () => {
+        currentTab = 'home';
+        setActiveTab(tabHome);
+        fetchMeals('https://www.themealdb.com/api/json/v1/1/search.php?s=chicken', 'Trending Recipes');
+    });
+}
 
-tabExplore.addEventListener('click', () => {
-    currentTab = 'explore';
-    setActiveTab(tabExplore);
-    fetchMeals('https://www.themealdb.com/api/json/v1/1/search.php?s=b', 'Explore Popular Recipes');
-});
+if (tabExplore) {
+    tabExplore.addEventListener('click', () => {
+        currentTab = 'explore';
+        setActiveTab(tabExplore);
+        fetchMeals('https://www.themealdb.com/api/json/v1/1/search.php?s=b', 'Explore Popular Recipes');
+    });
+}
 
-tabFavorites.addEventListener('click', () => {
-    currentTab = 'favorites';
-    setActiveTab(tabFavorites);
-    renderFavorites();
-});
+if (tabFavorites) {
+    tabFavorites.addEventListener('click', () => {
+        currentTab = 'favorites';
+        setActiveTab(tabFavorites);
+        renderFavorites();
+    });
+}
 
 function renderFavorites() {
     const favorites = getFavorites();
-    sectionTitle.textContent = 'Your Favorite Recipes';
+    if (sectionTitle) sectionTitle.textContent = 'Your Favorite Recipes & Notes';
     
     if (favorites.length === 0) {
-        recipeResults.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">You have no favorite recipes saved yet. Click the heart icon on any recipe to save it!</p>';
+        if (recipeResults) {
+            recipeResults.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">You have no favorite recipes saved yet. Click the heart icon on any recipe to save it!</p>';
+        }
         return;
     }
     renderMeals(favorites);
 }
 
-// Khởi chạy
-loadCategories();
+// Khởi chạy hệ thống
+loadFilters();
 fetchMeals('https://www.themealdb.com/api/json/v1/1/search.php?s=chicken', 'Trending Recipes');

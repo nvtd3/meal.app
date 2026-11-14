@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - meal.app</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="home.html" class="nav-brand">
+            <div class="nav-logo-icon"><i class="fa-solid fa-utensils"></i></div>
+            meal<span>.app</span>
+        </a>
+        <a href="home.html" class="back-home-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+    </nav>
+
+    <!-- Settings Container -->
+    <main class="settings-container">
+        <h1>Account Settings</h1>
+        <p class="settings-subtitle">Manage your password, dietary preferences, and data privacy options.</p>
+
+        <!-- Đổi mật khẩu -->
+        <div class="settings-card">
+            <h3><i class="fa-solid fa-lock"></i> Change Password</h3>
+            <form id="passwordForm">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password (at least 6 characters)</label>
+                    <input type="password" id="newPassword" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <input type="password" id="confirmNewPassword" required>
+                </div>
+                <button type="submit" class="btn-primary-custom">Update Password</button>
+            </form>
+        </div>
+
+        <!-- Tùy chọn sở thích ăn uống (Dietary Preferences) -->
+        <div class="settings-card">
+            <h3><i class="fa-solid fa-seedling"></i> Dietary Preferences</h3>
+            <p class="card-desc">Select your preferred diets to help us personalize recipes for you.</p>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="diet" value="Vegetarian"> Vegetarian</label>
+                <label><input type="checkbox" name="diet" value="Vegan"> Vegan</label>
+                <label><input type="checkbox" name="diet" value="Gluten-Free"> Gluten-Free</label>
+                <label><input type="checkbox" name="diet" value="Keto"> Keto / Low Carb</label>
+            </div>
+            <button type="button" id="savePreferencesBtn" class="btn-primary-custom" style="margin-top: 20px;">Save Preferences</button>
+        </div>
+
+        <!-- Vùng nguy hiểm (Danger Zone) -->
+        <div class="settings-card danger-zone">
+            <h3><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</h3>
+            <p class="card-desc">Clear your favorite recipes list or permanently delete your account from this browser.</p>
+            <div class="danger-actions">
+                <button type="button" id="clearFavoritesBtn" class="btn-danger-outline">Clear All Favorites</button>
+                <button type="button" id="deleteAccountBtn" class="btn-danger">Delete Account</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal thông báo -->
+    <div id="customModal" class="modal-overlay">
+        <div class="modal-card">
+            <div id="modalIcon" class="modal-icon success"><i class="fa-solid fa-check"></i></div>
+            <h3 id="modalTitle">Success!</h3>
+            <p id="modalMessage">Settings updated successfully.</p>
+            <button id="modalCloseBtn" class="modal-btn">OK</button>
+        </div>
+    </div>
+
+    <script src="js/settings.js"></script>
+</body>
+</html>

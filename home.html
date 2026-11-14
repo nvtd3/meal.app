@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - meal.app</title>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- CSS Link -->
     <link rel="stylesheet" href="css/home.css">
 </head>
 <body>
@@ -40,8 +37,8 @@
             </button>
 
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="#" class="dropdown-item"><i class="fa-regular fa-user"></i> My Profile</a>
-                <a href="#" class="dropdown-item"><i class="fa-solid fa-gear"></i> Settings</a>
+                <a href="profile.html" class="dropdown-item"><i class="fa-regular fa-user"></i> My Profile</a>
+                <a href="settings.html" class="dropdown-item"><i class="fa-solid fa-gear"></i> Settings</a>
                 <div style="height: 1px; background: var(--border-color); margin: 4px 0;"></div>
                 <a href="#" class="dropdown-item logout" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</a>
             </div>
@@ -59,8 +56,9 @@
         </form>
     </section>
 
-    <!-- Category Filter Bar -->
+    <!-- Filter Bars -->
     <div class="category-bar" id="categoryBar"></div>
+    <div class="category-bar" id="areaBar" style="margin-top: 10px;"></div>
 
     <!-- Recipe Results Main -->
     <main class="container-main">
@@ -87,7 +85,6 @@
         </div>
     </div>
 
-    <!-- JavaScript Link -->
     <script src="js/home.js"></script>
 </body>
 </html>
