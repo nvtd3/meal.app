@@ -1,29 +1,19 @@
 // 1. Kiểm tra đăng nhập bảo mật
 const currentUser = JSON.parse(localStorage.getItem('meal_current_user'));
 if (!currentUser) {
-    window.location.href = 'signin.html';
+    window.location.href = 'signin.html'; // nếu chx đăng nhập thì tự chuyển sang đăng nhập
 } else {
-    const profileNameEl = document.getElementById('profileName');
+    const profileNameEl = document.getElementById('profileName'); // profile ở góc trên phải
     const profileAvatarEl = document.getElementById('profileAvatar');
     if (profileNameEl) profileNameEl.textContent = currentUser.fullname;
     if (profileAvatarEl) profileAvatarEl.textContent = currentUser.fullname.charAt(0).toUpperCase();
-}
-
-// Áp dụng Theme nếu có
-const savedTheme = localStorage.getItem('meal_theme') || 'light';
-if (savedTheme === 'dark') {
-    document.documentElement.style.setProperty('--bg-main', '#1A1C23');
-    document.documentElement.style.setProperty('--card-bg', '#242731');
-    document.documentElement.style.setProperty('--text-main', '#F8FAFC');
-    document.documentElement.style.setProperty('--text-muted', '#94A3B8');
-    document.documentElement.style.setProperty('--border-color', '#334155');
 }
 
 // 2. Profile Dropdown & Logout (Có kiểm tra tồn tại phần tử an toàn)
 const profileBtn = document.getElementById('profileBtn');
 const dropdownMenu = document.getElementById('dropdownMenu');
 
-if (profileBtn && dropdownMenu) {
+if (profileBtn && dropdownMenu) { // profile dropdown khi click
     profileBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         dropdownMenu.classList.toggle('active');
@@ -44,7 +34,7 @@ if (logoutBtn) {
 }
 
 // Toast Notification
-function showToast(message, type = 'success') {
+function showToast(message, type = 'success') { // hiện toast (thông báo nhỏ) khi thực hiện một thao tác
     let container = document.getElementById('toastContainer');
     if (!container) {
         container = document.createElement('div');
@@ -58,7 +48,7 @@ function showToast(message, type = 'success') {
         : `<i class="fa-solid fa-circle-exclamation" style="color: #E63946;"></i> ${message}`;
     
     container.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+    setTimeout(() => toast.remove(), 3000); // xóa sau 3 giây
 }
 
 // Quản lý Favorites & Notes
@@ -67,7 +57,7 @@ function getFavorites() {
 }
 
 function toggleFavorite(meal, event) {
-    event.stopPropagation();
+    event.stopPropagation(); // làm event chỉ thực hiện tại chính địa điểm hiện tại và ko lây sang các chức năng con khác
     let favorites = getFavorites();
     const index = favorites.findIndex(item => item.idMeal === meal.idMeal);
 
@@ -98,7 +88,7 @@ const recipeResults = document.getElementById('recipeResults');
 const sectionTitle = document.getElementById('sectionTitle');
 let currentTab = 'home';
 
-async function fetchMeals(url, title) {
+async function fetchMeals(url, title) { // lấy thông tin công thức nấu ăn
     if (recipeResults) recipeResults.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">Loading recipes...</p>';
     if (sectionTitle) sectionTitle.textContent = title;
 
@@ -117,7 +107,7 @@ async function fetchMeals(url, title) {
     }
 }
 
-function renderMeals(meals) {
+function renderMeals(meals) { // khi favorite thì lưu vào tab favorite dưới dạng html và css mới
     const favorites = getFavorites();
     if (!recipeResults) return;
 
@@ -142,11 +132,9 @@ function renderMeals(meals) {
 }
 
 function escapeMealJson(meal) {
-    return JSON.stringify(meal).replace(/"/g, '&quot;');
+    return JSON.stringify(meal).replace(/"/g, '&quot;'); // hóa thành json string để dễ đọc và sử dụng
 }
 
-// Load Categories & Areas (An toàn với kiểm tra phần tử tồn tại)
-// Load Categories & Areas (Đã bỏ giới hạn để hiển thị đầy đủ tất cả quốc gia)
 async function loadFilters() {
     const categoryBar = document.getElementById('categoryBar');
     const areaBar = document.getElementById('areaBar');

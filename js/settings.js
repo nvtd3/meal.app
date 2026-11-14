@@ -80,12 +80,12 @@ if (passwordForm) {
 }
 
 // 2. Lưu sở thích ăn uống
-const savePreferencesBtn = document.getElementById('savePreferencesBtn');
+const savePreferencesBtn = document.getElementById('savePreferencesBtn'); // HIỆN TẠI CHƯA HOÀN TOÀN HOẠT ĐỘNG
 if (savePreferencesBtn) {
     savePreferencesBtn.addEventListener('click', function() {
         const selectedDiets = Array.from(document.querySelectorAll('input[name="diet"]:checked')).map(cb => cb.value);
         localStorage.setItem('meal_preferences', JSON.stringify(selectedDiets));
-        showToast('Dietary preferences saved successfully!');
+        showToast('Dietary preferences saved successfully! (WIP)');
     });
 }
 

@@ -3,7 +3,7 @@ const currentUser = JSON.parse(localStorage.getItem('meal_current_user'));
 const authNavArea = document.getElementById('authNavArea');
 const heroCtaArea = document.getElementById('heroCtaArea');
 
-if (currentUser) {
+if (currentUser) { // kiểm tra trạng thái tài khoản để điều chỉnh chữ trong các element của trang chủ
     const firstLetter = currentUser.fullname ? currentUser.fullname.charAt(0).toUpperCase() : 'U';
     
     authNavArea.innerHTML = `

@@ -13,7 +13,7 @@ const favorites = JSON.parse(localStorage.getItem('meal_favorites')) || [];
 document.getElementById('favCount').textContent = favorites.length;
 
 if (currentUser.loginTime) {
-    document.getElementById('memberSince').textContent = new Date(currentUser.loginTime).toLocaleDateString();
+    document.getElementById('memberSince').textContent = new Date(currentUser.loginTime).toLocaleDateString(); // thời điểm tạo tài khoản
 }
 
 // Modal handling
